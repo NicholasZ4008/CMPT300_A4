@@ -1,11 +1,11 @@
-DSSimul: main.o algorithm.o
-	gcc -o DSSimul main.o algorithm.o
+DSSimul: main.o algorithms.o
+	gcc -o DSSimul main.o algorithms.o
 
-main.o: main.c algorithm.h
+mains.o: main.c
 	gcc -c main.c
 
-algorithm.o: algorithm.c algorithm.h
-	gcc -c algorithm.c
+algorithms.o: algorithms.c
+	gcc -c algorithms.c
 
 clean:
 	rm -f *.o DSSimul
