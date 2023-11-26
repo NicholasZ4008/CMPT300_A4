@@ -1,10 +1,12 @@
-#include "algorithms.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include "algorithms.h"
 
 const int MIN_INT_ARRAY = 0;
 const int MAX_INT_ARRAY = 199;
+const int MAX_ARRAY_SIZE = 50;
 
 int main(int argc, char *argv[]) {
     if (argc > 1) {//argv[0] is ./DSSimul
@@ -34,9 +36,12 @@ int main(int argc, char *argv[]) {
         }
 
         /*TEMPORARY JUST FOR TESTING*/
-        printf("Printing input: ");
+        printf("Printing input: \n");
         for(int j = 0; j < numsRead;j++){
             printf("%d ", numberInput[j]);
+            if(j % 10 == 0 && j > 1){
+                printf("\n");
+            }
         }
         printf("\n");
         /*END TEMPORARY*/
@@ -46,6 +51,25 @@ int main(int argc, char *argv[]) {
     } else {
         // Generate at least 50 unique random integers between 0 and 199
         // ...
+
+        srand((unsigned int)time(NULL));
+        int randArr[MAX_ARRAY_SIZE];
+
+        for(int i = 0; i < MAX_ARRAY_SIZE; i++){
+            randArr[i] = rand() % 200;
+        }
+
+        /*TEMPORARY JUST FOR TESTING*/
+        printf("Printing input: \n");
+        for(int j = 0; j < MAX_ARRAY_SIZE;j++){
+            printf("%d ", randArr[j]);
+            if(j % 10 == 0 && j > 5){
+                printf("\n");
+            }
+        }
+        printf("\n");
+        /*END TEMPORARY*/
+
     }
     return 0;
 }
