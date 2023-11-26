@@ -4,8 +4,6 @@
 #include <time.h>
 #include "algorithms.h"
 
-const int MIN_INT_ARRAY = 0;
-const int MAX_INT_ARRAY = 199;
 const int MAX_ARRAY_SIZE = 50;
 
 int main(int argc, char *argv[]) {
@@ -53,17 +51,17 @@ int main(int argc, char *argv[]) {
         // ...
 
         srand((unsigned int)time(NULL));
-        int randArr[MAX_ARRAY_SIZE];
+        int randArr[MAX_ARRAY_SIZE]; //Update const at top of file to change
 
         for(int i = 0; i < MAX_ARRAY_SIZE; i++){
-            randArr[i] = rand() % 200;
+            randArr[i] = rand() % MAX_TRACK_NUMBER;
         }
 
         /*TEMPORARY JUST FOR TESTING*/
         printf("Printing input: \n");
         for(int j = 0; j < MAX_ARRAY_SIZE;j++){
             printf("%d ", randArr[j]);
-            if(j % 10 == 0 && j > 5){
+            if(j % 10 == 0 && j > 1){
                 printf("\n");
             }
         }
