@@ -1,17 +1,16 @@
 #ifndef ALGORITHM_H
 #define ALGORITHM_H
 
-#include <stdlib.h> // For size_t
+#include <stdlib.h>
 #include <stdlib.h>
 
-// Define any necessary constants
-// For example, the maximum track number if needed
+//assignment declared track number
 #define MAX_TRACK_NUMBER 200
 
-// Function declaration for SSTF disk scheduling algorithm
-void sstf(int *requestArray, size_t numRequests);
+//SSTF disk scheduling algorithm
+void sstf(int *requestArray, int n);
 
-// Function declaration for SCAN disk scheduling algorithm
+//SCAN disk scheduling algorithm
 void scan(int *requestArray, size_t numRequests, int startTrack);
 
 #endif // ALGORITHM_H

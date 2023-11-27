@@ -9,7 +9,6 @@ const int MAX_ARRAY_SIZE = 50;
 int main(int argc, char *argv[]) {
     if (argc > 1) {//argv[0] is ./DSSimul
         // Parse argv[1] for track numbers
-        // ...
 
         //Setup for reading input
         char* inputArray = argv[1];
@@ -48,7 +47,6 @@ int main(int argc, char *argv[]) {
 
     } else {
         // Generate at least 50 unique random integers between 0 and 199
-        // ...
 
         srand((unsigned int)time(NULL));
         int randArr[MAX_ARRAY_SIZE]; //Update const at top of file to change
