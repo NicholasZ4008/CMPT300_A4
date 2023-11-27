@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include "algorithms.h"
@@ -33,16 +31,25 @@ int main(int argc, char *argv[]) {
             seperator = strtok(NULL, ",");
         }
 
-        /*TEMPORARY JUST FOR TESTING*/
-        printf("Printing input: \n");
+        printf("Requests: ");
         for(int j = 0; j < numsRead;j++){
             printf("%d ", numberInput[j]);
+            /*REMOVE IF STATEMENT BEFORE SUBMISSION*/
             if(j % 10 == 0 && j > 1){
                 printf("\n");
             }
         }
         printf("\n");
-        /*END TEMPORARY*/
+        scan(numberInput, numsRead);
+        // printf("After return: ");
+        // for(int j = 0; j < numsRead;j++){
+        //     printf("%d ", numberInput[j]);
+        //     /*REMOVE IF STATEMENT BEFORE SUBMISSION*/
+        //     if(j % 10 == 0 && j > 1){
+        //         printf("\n");
+        //     }
+        // }
+        // printf("\n");
 
         free(numberInput);
 
@@ -57,16 +64,17 @@ int main(int argc, char *argv[]) {
             randArr[i] = rand() % MAX_TRACK_NUMBER;
         }
 
-        /*TEMPORARY JUST FOR TESTING*/
-        printf("Printing input: \n");
+        printf("Requests: \n");
         for(int j = 0; j < MAX_ARRAY_SIZE;j++){
             printf("%d ", randArr[j]);
+        /*REMOVE BEFORE SUBMISSION*/
             if(j % 10 == 0 && j > 1){
                 printf("\n");
             }
         }
         printf("\n");
-        /*END TEMPORARY*/
+
+        scan(randArr, MAX_ARRAY_SIZE);
 
     }
     return 0;
