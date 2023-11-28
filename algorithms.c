@@ -37,7 +37,7 @@ void calculateDelays(const int *originalSequence, const int *computedSequence, i
         int originalPosition = findPositionInArray(originalSequence, computedSequence[i], numRequests);
         int computedPosition = i - 1; // Adjusted for the skipped head in the original sequence
 
-        int delay = computedPosition - originalPosition;
+        int delay = (computedPosition - originalPosition) + 1;
         if (delay > 0) {
             totalDelay += delay;
             delayedTracks++;
@@ -52,8 +52,6 @@ void calculateDelays(const int *originalSequence, const int *computedSequence, i
     printf("Longest delay compared to FCFS: %d\n", longestDelay);
     printf("Average delay for tracks processed later than under FCFS: %.2f\n", averageDelay);
 }
-
-
 
 void calculatedifference(int requestArray[], int head, int diff[][2], int n)
 {
@@ -78,7 +76,7 @@ int findMIN(int diff[][2], int n){
 
 //SSTF disk scheduling algorithm
 void sstf(int *requestArray, int numRequests){
-
+    printf("SSTF\n");
     if (numRequests <= 1) {
         return;
     }
@@ -112,9 +110,6 @@ void sstf(int *requestArray, int numRequests){
     }
 
     // Print the sequence
-    printf("Original Sequence: ");
-    printArray(requestArray, numRequests);
-
     printf("Sequence Order: ");
     printArray(seeksequence, numRequests);
 
@@ -134,10 +129,7 @@ void scan(int *requestArray, size_t numRequests){
 
     int totalNumTracksTraversed = 0;
     int longestDelay = 0; //Compared to FCFS
-    int delaySum = 0;
     int numDelayedTracks = 0;
-    printf("Number of tracks: %ld\n", numRequests);
-    printf("Head position: %d\n", head);
 
     int newArray[numRequests];
     int numLess = 0;
@@ -185,14 +177,6 @@ void scan(int *requestArray, size_t numRequests){
                 processOrder[j] = arrayLess[numLess];
                 totalNumTracksTraversed += abs(processOrder[j] - head);
 
-                int fcfsIndex = j - numLess;
-                if(fcfsIndex > 0){
-                    int fcfsDelay = abs(fcfsIndex - head);
-                    delaySum += fcfsDelay;
-                    numDelayedTracks++;
-                }
-
-
                 head = processOrder[j];
                 numLess--;
                 j++;
@@ -205,13 +189,6 @@ void scan(int *requestArray, size_t numRequests){
                 processOrder[j] = arrayMore[numMore];
                 totalNumTracksTraversed += abs(processOrder[j] - head);
 
-                int fcfsIndex = j - numLess;
-                if(fcfsIndex > 0){
-                    int fcfsDelay = abs(fcfsIndex - head);
-                    delaySum += fcfsDelay;
-                    numDelayedTracks++;
-                }
-
                 head = processOrder[j];
                 numMore++;
                 more--;
@@ -220,22 +197,11 @@ void scan(int *requestArray, size_t numRequests){
             isGoingLeft = true;
         }
     }
-
-    printf("Seek Sequence: \n");
-    for (int b = 0; b < numRequests; b++){
-        printf("%d ", processOrder[b]);
-        if(numRequests > 20){
-            if(b % 10 == 0){
-                printf("\n");
-            }
-        }
-    }
-    printf("\n\n");
+    printf("Sequence Order: ");
+    printArray(processOrder, numRequests);
+    printf("Tracks Traversed: %ld\n", numRequests);
+    printf("Head position: %d\n", requestArray[0]);
 
     printf("Total number of tracks traversed: %d\n", totalNumTracksTraversed);
-    double avgSeekDistance = (double) totalNumTracksTraversed/numRequests;
-    printf("Average number of tracks traversed: %.2f\n", avgSeekDistance);
-    double avgDelay = numDelayedTracks > 0 ? (double) delaySum / numDelayedTracks : 0;
-    printf("Avd delay track: %f\n", avgDelay);
-    printf("Longest delay (compared to FCFS): %d\n", longestDelay);
+    calculateDelays(requestArray, processOrder, numRequests);
 }

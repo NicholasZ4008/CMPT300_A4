@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
             seperator = strtok(NULL, ",");
         }
 
-        printf("Requests: ");
+        printf("Original Sequence: ");
         for(int j = 0; j < numsRead;j++){
             printf("%d ", numberInput[j]);
             /*REMOVE IF STATEMENT BEFORE SUBMISSION*/
@@ -40,15 +40,7 @@ int main(int argc, char *argv[]) {
         }
         printf("\n");
         scan(numberInput, numsRead);
-        // printf("After return: ");
-        // for(int j = 0; j < numsRead;j++){
-        //     printf("%d ", numberInput[j]);
-        //     /*REMOVE IF STATEMENT BEFORE SUBMISSION*/
-        //     if(j % 10 == 0 && j > 1){
-        //         printf("\n");
-        //     }
-        // }
-        // printf("\n");
+        printf("\n");
         sstf(numberInput, numsRead);
 
         free(numberInput);
