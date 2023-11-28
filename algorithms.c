@@ -1,13 +1,46 @@
 #include "algorithms.h"
 
-void printOriginalArrayElems(int *requestArray, int size){
-    printf("Original array elements: ");
-
+void printArray(int *requestArray, int size){
     for(int i=0;i<size; i++){
         printf("%d ,",requestArray[i]);
     }
     printf("\n");
 }
+
+void calculateDelays(const int *originalSequence, const int *computedSequence, int numRequests) {
+    int longestDelay = 0;
+    int totalDelay = 0;
+    int delayedTracks = 0;
+
+    for (int i = 1; i < numRequests; i++) {
+        int originalPosition = findPositionInArray(originalSequence, computedSequence[i], numRequests);
+        int computedPosition = i - 1; // Adjusted for the skipped head in the original sequence
+
+        int delay = computedPosition - originalPosition;
+        if (delay > 0) {
+            totalDelay += delay;
+            delayedTracks++;
+        }
+        if (delay > longestDelay) {
+            longestDelay = delay;
+        }
+    }
+
+    double averageDelay = delayedTracks > 0 ? (double)totalDelay / delayedTracks : 0;
+
+    printf("Longest delay compared to FCFS: %d\n", longestDelay);
+    printf("Average delay for tracks processed later than under FCFS: %.2f\n", averageDelay);
+}
+
+int findPositionInArray(const int *array, int value, int size) {
+    for (int i = 0; i < size; i++) {
+        if (array[i] == value) {
+            return i;
+        }
+    }
+    return -1; // Value not found
+}
+
 
 void calculatedifference(int requestArray[], int head, int diff[][2], int n)
 {
@@ -39,22 +72,20 @@ void sstf(int *requestArray, int numRequests){
 
     // The head is always the first element in the requestArray
     int head = requestArray[0];
-
-    // Create array of differences and flags
     int diff[numRequests-1][2]; // Array size is numRequests-1 because the head is not included
+
+
     for (int i = 0; i < numRequests-1; i++) {
         diff[i][0] = 0;
         diff[i][1] = 0;
     }
 
-    // Count total number of seek operations
     int seekcount = 0;
-
-    // Stores sequence in which disk access is done
     int seeksequence[numRequests];
+    seeksequence[0] = head;
 
     for (int i = 0; i < numRequests-1; i++) {
-        seeksequence[i] = head;
+        
         calculatedifference(requestArray+1, head, diff, numRequests-1); // requestArray+1 to skip the head
         int index = findMIN(diff, numRequests-1);
         diff[index][1] = 1;
@@ -64,14 +95,21 @@ void sstf(int *requestArray, int numRequests){
 
         // Accessed track is now new head
         head = requestArray[index + 1]; // index + 1 to adjust for the skipped head
+        seeksequence[i+1] = head;
     }
-    seeksequence[numRequests-1] = head;
-
-    //print the number of requests
-    printf("Total number of seek operations = %d\n", seekcount);
 
     // Print the sequence
-    printOriginalArrayElems(requestArray, numRequests);
+    printf("Original Sequence: ");
+    printArray(requestArray, numRequests);
+
+    printf("Sequence Order: ");
+    printArray(seeksequence, numRequests);
+
+    printf("Tracks Traversed: %d", numRequests);
+
+    //prints both average and longest delay
+    calculateDelays(requestArray, seeksequence, numRequests);
+
 }
 
 //SCAN disk scheduling algorithm
