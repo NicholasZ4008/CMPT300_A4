@@ -7,6 +7,15 @@ void printArray(int *requestArray, int size){
     printf("\n");
 }
 
+int findPositionInArray(const int *array, int value, int size) {
+    for (int i = 0; i < size; i++) {
+        if (array[i] == value) {
+            return i;
+        }
+    }
+    return -1; // Value not found
+}
+
 void calculateDelays(const int *originalSequence, const int *computedSequence, int numRequests) {
     int longestDelay = 0;
     int totalDelay = 0;
@@ -32,14 +41,6 @@ void calculateDelays(const int *originalSequence, const int *computedSequence, i
     printf("Average delay for tracks processed later than under FCFS: %.2f\n", averageDelay);
 }
 
-int findPositionInArray(const int *array, int value, int size) {
-    for (int i = 0; i < size; i++) {
-        if (array[i] == value) {
-            return i;
-        }
-    }
-    return -1; // Value not found
-}
 
 
 void calculatedifference(int requestArray[], int head, int diff[][2], int n)
