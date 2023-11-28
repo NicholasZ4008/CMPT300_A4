@@ -2,7 +2,7 @@
 
 void printArray(int *requestArray, int size){
     for(int i=0;i<size; i++){
-        printf("%d ,",requestArray[i]);
+        printf("%d ",requestArray[i]);
     }
     printf("\n");
 }
@@ -105,7 +105,7 @@ void sstf(int *requestArray, int numRequests){
     printf("Sequence Order: ");
     printArray(seeksequence, numRequests);
 
-    printf("Tracks Traversed: %d", numRequests);
+    printf("Tracks Traversed: %d\n", numRequests);
 
     //prints both average and longest delay
     calculateDelays(requestArray, seeksequence, numRequests);

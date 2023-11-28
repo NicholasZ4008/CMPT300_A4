@@ -2,8 +2,7 @@
 #define ALGORITHM_H
 
 #include <stdlib.h>
-#include <stdlib.h>
-
+#include <stdio.h>
 //assignment declared track number
 #define MAX_TRACK_NUMBER 200
 

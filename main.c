@@ -42,6 +42,7 @@ int main(int argc, char *argv[]) {
         }
         printf("\n");
         /*END TEMPORARY*/
+        sstf(numberInput, numsRead);
 
         free(numberInput);
 
