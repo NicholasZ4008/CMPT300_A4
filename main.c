@@ -4,6 +4,15 @@
 
 const int MAX_ARRAY_SIZE = 50;
 
+bool isUnique(int* array, int length, int value){
+    for(int i = 0; i < length; i++){
+        if(array[i] == value){
+            return false;
+        }
+    }
+    return true;
+}
+
 int main(int argc, char *argv[]) {
     if (argc > 1) {//argv[0] is ./DSSimul
         // Parse argv[1] for track numbers
@@ -53,21 +62,31 @@ int main(int argc, char *argv[]) {
         srand((unsigned int)time(NULL));
         int randArr[MAX_ARRAY_SIZE]; //Update const at top of file to change
 
-        for(int i = 0; i < MAX_ARRAY_SIZE; i++){
-            randArr[i] = rand() % MAX_TRACK_NUMBER;
+        for(int i = 0; i < MAX_ARRAY_SIZE;){
+            int randNum = rand() % (MAX_TRACK_NUMBER+1);
+            if(isUnique(randArr, i, randNum)){
+                randArr[i] = randNum;
+                i++;
+            }
         }
 
         printf("Requests: \n");
         for(int j = 0; j < MAX_ARRAY_SIZE;j++){
             printf("%d ", randArr[j]);
         /*REMOVE BEFORE SUBMISSION*/
-            if(j % 10 == 0 && j > 1){
+            if(j % 15 == 0 && j > 1){
                 printf("\n");
             }
         }
         printf("\n");
 
+        printf("Head: %d\n", randArr[0]);
+        printf("Tracks Traversed: %d\n", MAX_ARRAY_SIZE);
+        printf("\n\n");
         scan(randArr, MAX_ARRAY_SIZE);
+        printf("\n");
+        sstf(randArr, MAX_ARRAY_SIZE);
+        
 
     }
     return 0;
