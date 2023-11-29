@@ -38,7 +38,9 @@ int main(int argc, char *argv[]) {
                 printf("\n");
             }
         }
-        printf("\n");
+        printf("Head: %d\n", numberInput[0]);
+        printf("Tracks Traversed: %d\n", numsRead);
+        printf("\n\n");
         scan(numberInput, numsRead);
         printf("\n");
         sstf(numberInput, numsRead);

@@ -50,6 +50,8 @@ void calculateDelays(const int *originalSequence, const int *computedSequence, i
     double averageDelay = delayedTracks > 0 ? (double)totalDelay / delayedTracks : 0;
 
     printf("Longest delay compared to FCFS: %d\n", longestDelay);
+    printf("Total Delay: %d\n", totalDelay);
+    printf("Delayed Tracks: %d\n", delayedTracks);
     printf("Average delay for tracks processed later than under FCFS: %.2f\n", averageDelay);
 }
 
@@ -113,8 +115,6 @@ void sstf(int *requestArray, int numRequests){
     printf("Sequence Order: ");
     printArray(seeksequence, numRequests);
 
-    printf("Tracks Traversed: %d\n", numRequests);
-
     //prints both average and longest delay
     calculateDelays(requestArray, seeksequence, numRequests);
 
@@ -125,7 +125,7 @@ void scan(int *requestArray, size_t numRequests){
     printf("Scan\n");
     int currentIndex = 0;
     int head = requestArray[currentIndex];
-    bool isGoingLeft = false;
+    bool isGoingLeft = true;
 
     int totalNumTracksTraversed = 0;
     int longestDelay = 0; //Compared to FCFS
@@ -165,43 +165,52 @@ void scan(int *requestArray, size_t numRequests){
     numMore = 0;
     numLess--;
 
-    int j = 1;
 
     //Run until theres still a request left
+    int j = 1;
     while(j < numRequests){
 
         //Going in decreasing order
         if(isGoingLeft){
-            //If current value less than head
+            if(numLess >= 0){
+                printf("Add less: %d\n", abs(head - 0));
+                totalNumTracksTraversed += abs(head - 0);
+            }
             while(numLess >= 0){
                 processOrder[j] = arrayLess[numLess];
-                totalNumTracksTraversed += abs(processOrder[j] - head);
+                // totalNumTracksTraversed += abs(processOrder[j] - head);
 
                 head = processOrder[j];
                 numLess--;
                 j++;
             }
-            isGoingLeft = false;
-            
+            head = 0;
+            isGoingLeft = false;            
 
         } else{ //Going in increasing order
+
+            if(more > 0){
+                printf("Add more: %d\n", abs(head - 199));
+                totalNumTracksTraversed += abs(head - 199);
+            }
             while(more > 0){
                 processOrder[j] = arrayMore[numMore];
-                totalNumTracksTraversed += abs(processOrder[j] - head);
+                // totalNumTracksTraversed += abs(processOrder[j] - head);
 
                 head = processOrder[j];
                 numMore++;
                 more--;
                 j++;
             }
+            // if(head != 199 && more <= 0){
+            //     totalNumTracksTraversed += abs(199 - head);
+            // }
             isGoingLeft = true;
+            head = MAX_TRACK_NUMBER;
         }
     }
     printf("Sequence Order: ");
     printArray(processOrder, numRequests);
-    printf("Tracks Traversed: %ld\n", numRequests);
-    printf("Head position: %d\n", requestArray[0]);
-
-    printf("Total number of tracks traversed: %d\n", totalNumTracksTraversed);
+    printf("Total tracks traversed: %d\n", totalNumTracksTraversed);
     calculateDelays(requestArray, processOrder, numRequests);
 }
