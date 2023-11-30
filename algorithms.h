@@ -13,6 +13,7 @@
 void sstf(int *requestArray, int n);
 
 // Function declaration for SCAN disk scheduling algorithm
-void scan(int *requestArray, size_t numRequests);
+void scan(const int *requestArray,const size_t numRequests);
+void printArray(const int *requestArray,const int size);
 
 #endif // ALGORITHM_H

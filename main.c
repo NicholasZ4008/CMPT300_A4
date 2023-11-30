@@ -4,6 +4,7 @@
 
 const int MAX_ARRAY_SIZE = 50;
 
+//Helper to check for unique array values
 bool isUnique(int* array, int length, int value){
     for(int i = 0; i < length; i++){
         if(array[i] == value){
@@ -13,12 +14,25 @@ bool isUnique(int* array, int length, int value){
     return true;
 }
 
-int main(int argc, char *argv[]) {
-    if (argc > 1) {//argv[0] is ./DSSimul
-        // Parse argv[1] for track numbers
+//Function calls for both random and inputted array
+void outputs_and_function_calls(int* array, int length){
+    printf("Head: %d\n", array[0]);
+    printf("Tracks To Traverse: %d\n", length);
+    printf("\n");
+    scan(array, length);
+    printf("\n");
+    sstf(array, length);
+}
 
+int main(int argc, char *argv[]) {
+    //User inputted array
+    if (argc > 1) {
         //Setup for reading input
         char* inputArray = argv[1];
+        if(inputArray == NULL){
+            printf("Nothing inputted.\nTerminating program...\n");
+            return -2;
+        }
         int arraySize = 1;
         int* numberInput = (int*) malloc(arraySize * sizeof(int));
 
@@ -30,8 +44,7 @@ int main(int argc, char *argv[]) {
         //Loop until end of strings reached
         while(seperator != NULL){
             numberInput[numsRead++] = atoi(seperator);
-
-            //Increment size of array if theres still need
+            //Increase size of array if more space needed
             if(numsRead == arraySize){
                 arraySize *= 2;
                 numberInput = (int*) realloc(numberInput, arraySize*sizeof(int));
@@ -39,54 +52,44 @@ int main(int argc, char *argv[]) {
             seperator = strtok(NULL, ",");
         }
 
-        printf("Original Sequence: ");
-        for(int j = 0; j < numsRead;j++){
-            printf("%d ", numberInput[j]);
-            /*REMOVE IF STATEMENT BEFORE SUBMISSION*/
-            if(j % 10 == 0 && j > 1){
-                printf("\n");
-            }
+        //Not enough value inputted to be processed
+        if(numsRead < 3){
+            printf("There must be atleast 3 numbers. Check input.\nTerminating program...\n");
+            free(numberInput);
+            return -2;
         }
-        printf("Head: %d\n", numberInput[0]);
-        printf("Tracks Traversed: %d\n", numsRead);
-        printf("\n\n");
-        scan(numberInput, numsRead);
-        printf("\n");
-        sstf(numberInput, numsRead);
 
+        printf("Original Sequence: ");
+        for(int j = 0; j < numsRead; j++){
+            if(numberInput[j] < 0 || numberInput[j] > 199){
+                printf("\nIncorrect value \"%d\" given.\nTerminating program...\n", numberInput[j]);
+                free(numberInput);
+                return -1;
+            }
+            printf("%d ", numberInput[j]);
+        }
+
+        outputs_and_function_calls(numberInput, numsRead);
         free(numberInput);
-
+        
     } else {
         // Generate at least 50 unique random integers between 0 and 199
-
         srand((unsigned int)time(NULL));
         int randArr[MAX_ARRAY_SIZE]; //Update const at top of file to change
 
+        //Populate array
         for(int i = 0; i < MAX_ARRAY_SIZE;){
-            int randNum = rand() % (MAX_TRACK_NUMBER+1);
+            int randNum = rand() % (MAX_TRACK_NUMBER);
             if(isUnique(randArr, i, randNum)){
                 randArr[i] = randNum;
                 i++;
             }
         }
 
-        printf("Requests: \n");
-        for(int j = 0; j < MAX_ARRAY_SIZE;j++){
-            printf("%d ", randArr[j]);
-        /*REMOVE BEFORE SUBMISSION*/
-            if(j % 15 == 0 && j > 1){
-                printf("\n");
-            }
-        }
-        printf("\n");
+        printf("Original Sequence: \n");
+        printArray(randArr, MAX_ARRAY_SIZE);
 
-        printf("Head: %d\n", randArr[0]);
-        printf("Tracks Traversed: %d\n", MAX_ARRAY_SIZE);
-        printf("\n\n");
-        scan(randArr, MAX_ARRAY_SIZE);
-        printf("\n");
-        sstf(randArr, MAX_ARRAY_SIZE);
-        
+        outputs_and_function_calls(randArr, MAX_ARRAY_SIZE);      
 
     }
     return 0;

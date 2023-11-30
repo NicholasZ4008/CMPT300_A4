@@ -12,14 +12,15 @@ void bubbleSortHelper(size_t numRequests,int* newArray){
         }
     }
 }
-void printArray(int *requestArray, int size){
+
+void printArray(const int *requestArray,const int size){
     for(int i=0;i<size; i++){
         printf("%d ",requestArray[i]);
     }
     printf("\n");
 }
 
-int findPositionInArray(const int *array, int value, int size) {
+int findPositionInArray(const int *array,const int value,const int size) {
     for (int i = 0; i < size; i++) {
         if (array[i] == value) {
             return i;
@@ -28,6 +29,7 @@ int findPositionInArray(const int *array, int value, int size) {
     return -1; // Value not found
 }
 
+//Get delays of computed sequence
 void calculateDelays(const int *originalSequence, const int *computedSequence, int numRequests) {
     int longestDelay = 0;
     int totalDelay = 0;
@@ -37,6 +39,7 @@ void calculateDelays(const int *originalSequence, const int *computedSequence, i
         int originalPosition = findPositionInArray(originalSequence, computedSequence[i], numRequests);
         int computedPosition = i - 1; // Adjusted for the skipped head in the original sequence
 
+        //Add 1 for getting value instead of index
         int delay = (computedPosition - originalPosition) + 1;
         if (delay > 0) {
             totalDelay += delay;
@@ -76,12 +79,11 @@ int findMIN(int diff[][2], int n){
     return index;
 }
 
+/*Disk scheduling implementations*/
+
 //SSTF disk scheduling algorithm
 void sstf(int *requestArray, int numRequests){
     printf("SSTF\n");
-    if (numRequests <= 1) {
-        return;
-    }
 
     // The head is always the first element in the requestArray
     int head = requestArray[0];
@@ -122,19 +124,16 @@ void sstf(int *requestArray, int numRequests){
 }
 
 //SCAN disk scheduling algorithm
-void scan(int *requestArray, size_t numRequests){
+void scan(const int *requestArray,const size_t numRequests){
     printf("Scan\n");
-    int currentIndex = 0;
-    int head = requestArray[currentIndex];
+    int head = requestArray[0];
     bool isGoingLeft = true;
-
     int totalNumTracksTraversed = 0;
-    int longestDelay = 0; //Compared to FCFS
-    int numDelayedTracks = 0;
 
-    int newArray[numRequests];
+    int newArray[numRequests]; //Sorted array
     int numLess = 0;
     int numMore = 0;
+    //Clone array and get num of values greater than and less than head
     for(int i = 0; i < numRequests;i++){
         if(requestArray[i] < head){
             numLess++;
@@ -144,13 +143,17 @@ void scan(int *requestArray, size_t numRequests){
         newArray[i] = requestArray[i];
     }
 
+    //Initialize arrays for greater and less than head
     int arrayLess[numRequests - numMore];
     int arrayMore[numRequests - numLess];
     int less = 0;
     int more = 0;
+
+
     //Sort array
     bubbleSortHelper(numRequests, newArray);
 
+    //Setup array with values greater and less than head
     for(int i = 0; i < numRequests;i++){
         if(newArray[i] <= head){
             arrayLess[less] = newArray[i];
@@ -161,11 +164,10 @@ void scan(int *requestArray, size_t numRequests){
         }
     }
 
-    int processOrder[numRequests];
+    int processOrder[numRequests]; //Order of actuall process
     processOrder[0] = requestArray[0];
     numMore = 0;
     numLess--;
-
 
     //Run until theres still a request left
     int j = 1;
@@ -174,13 +176,10 @@ void scan(int *requestArray, size_t numRequests){
         //Going in decreasing order
         if(isGoingLeft){
             if(numLess >= 0){
-                printf("Add less: %d\n", abs(head - 0));
                 totalNumTracksTraversed += abs(head - 0);
             }
             while(numLess >= 0){
                 processOrder[j] = arrayLess[numLess];
-                // totalNumTracksTraversed += abs(processOrder[j] - head);
-
                 head = processOrder[j];
                 numLess--;
                 j++;
@@ -190,26 +189,24 @@ void scan(int *requestArray, size_t numRequests){
 
         } else{ //Going in increasing order
 
+            //Increase num of tracks traversed 
             if(more > 0){
-                printf("Add more: %d\n", abs(head - 199));
                 totalNumTracksTraversed += abs(head - 199);
             }
             while(more > 0){
                 processOrder[j] = arrayMore[numMore];
-                // totalNumTracksTraversed += abs(processOrder[j] - head);
-
                 head = processOrder[j];
-                numMore++;
+                numMore++; //Update counters
                 more--;
                 j++;
             }
-            // if(head != 199 && more <= 0){
-            //     totalNumTracksTraversed += abs(199 - head);
-            // }
+            //Update direction
             isGoingLeft = true;
             head = MAX_TRACK_NUMBER;
         }
     }
+
+    //Print results
     printf("Sequence Order: ");
     printArray(processOrder, numRequests);
     printf("Total tracks traversed: %d\n", totalNumTracksTraversed);
