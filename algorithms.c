@@ -87,24 +87,23 @@ void sstf(int *requestArray, int numRequests){
     int head = requestArray[0];
     int diff[numRequests-1][2]; // Array size is numRequests-1 because the head is not included
 
-
     for (int i = 0; i < numRequests-1; i++) {
         diff[i][0] = 0;
         diff[i][1] = 0;
     }
 
-    int seekcount = 0;
+    int totalSeekCount = 0; // To keep track of the total number of tracks traversed
     int seeksequence[numRequests];
     seeksequence[0] = head;
 
     for (int i = 0; i < numRequests-1; i++) {
-        
         calculatedifference(requestArray+1, head, diff, numRequests-1); // requestArray+1 to skip the head
         int index = findMIN(diff, numRequests-1);
         diff[index][1] = 1;
 
-        // Increase the total count
-        seekcount += diff[index][0];
+        // Here we calculate the absolute distance moved by the head
+        int distance = abs(head - requestArray[index + 1]);
+        totalSeekCount += distance; // Add the distance to the total seek count
 
         // Accessed track is now new head
         head = requestArray[index + 1]; // index + 1 to adjust for the skipped head
@@ -115,9 +114,11 @@ void sstf(int *requestArray, int numRequests){
     printf("Sequence Order: ");
     printArray(seeksequence, numRequests);
 
-    //prints both average and longest delay
-    calculateDelays(requestArray, seeksequence, numRequests);
+    // Print the total number of tracks traversed
+    printf("Total number of tracks traversed: %d\n", totalSeekCount);
 
+    // prints both average and longest delay
+    calculateDelays(requestArray, seeksequence, numRequests);
 }
 
 //SCAN disk scheduling algorithm
