@@ -177,7 +177,7 @@ void scan(const int *requestArray,const size_t numRequests){
     while(j < (numRequests - 1)){
 
         //Going in decreasing order
-        if(isGoingLeft){
+        if(isGoingLeft && numLess >= 0){
             while(numLess >= 0){
                 processOrder[j] = arrayLess[numLess];
                 totalNumTracksTraversed += abs(head - processOrder[j]);
@@ -185,7 +185,7 @@ void scan(const int *requestArray,const size_t numRequests){
                 numLess--;
                 j++;
             }
-            if(head > 0 && head == arrayLess[0]){
+            if(head > 0 && head == arrayLess[0] && j != numRequests){
                 totalNumTracksTraversed += abs(head - 0);
             }
             head = 0;
