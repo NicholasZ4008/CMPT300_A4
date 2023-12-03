@@ -1,7 +1,7 @@
 #include "algorithms.h"
 
 /*Helper functions*/
-void bubbleSortHelper(size_t numRequests,int* newArray){
+void bubbleSortHelper(int* newArray, size_t numRequests){
     for(int i = 0; i < numRequests - 1; i++){
         for(int j = 0; j < numRequests - i - 1; j++){
             if(newArray[j] > newArray[j+1]){
@@ -131,17 +131,22 @@ void scan(const int *requestArray,const size_t numRequests){
     int totalNumTracksTraversed = 0;
 
     int newArray[numRequests]; //Sorted array
+
+    //Counter used for memory safety and have correct size array
     int numLess = 0;
     int numMore = 0;
     //Clone array and get num of values greater than and less than head
     for(int i = 0; i < numRequests;i++){
         if(requestArray[i] < head){
             numLess++;
-        }else{
+        }else if (requestArray[i] > head){
             numMore++;
         }
         newArray[i] = requestArray[i];
     }
+    
+    //Sort array
+    bubbleSortHelper(newArray, numRequests);
 
     //Initialize arrays for greater and less than head
     int arrayLess[numRequests - numMore];
@@ -150,55 +155,55 @@ void scan(const int *requestArray,const size_t numRequests){
     int more = 0;
 
 
-    //Sort array
-    bubbleSortHelper(numRequests, newArray);
-
     //Setup array with values greater and less than head
-    for(int i = 0; i < numRequests;i++){
-        if(newArray[i] <= head){
+    for(int i = 0; i < numRequests; i++){
+        if(newArray[i] < head){
             arrayLess[less] = newArray[i];
             less++;
-        }else{
+        }else if(newArray[i] > head){
             arrayMore[more] = newArray[i];
             more++;
         }
     }
 
-    int processOrder[numRequests]; //Order of actuall process
+    int processOrder[numRequests]; //Order of actual process
     processOrder[0] = requestArray[0];
-    numMore = 0;
     numLess--;
+    numMore = 0;
+
 
     //Run until theres still a request left
     int j = 1;
-    while(j < numRequests){
+    while(j < (numRequests - 1)){
 
         //Going in decreasing order
         if(isGoingLeft){
-            if(numLess >= 0){
-                totalNumTracksTraversed += abs(head - 0);
-            }
             while(numLess >= 0){
                 processOrder[j] = arrayLess[numLess];
+                totalNumTracksTraversed += abs(head - processOrder[j]);
                 head = processOrder[j];
                 numLess--;
                 j++;
+            }
+            if(head > 0 && head == arrayLess[0]){
+                totalNumTracksTraversed += abs(head - 0);
             }
             head = 0;
             isGoingLeft = false;            
 
         } else{ //Going in increasing order
 
-            //Increase num of tracks traversed 
-            if(more > 0){
-                totalNumTracksTraversed += abs(head - 199);
-            }
             while(more > 0){
                 processOrder[j] = arrayMore[numMore];
+                totalNumTracksTraversed += abs(head - processOrder[j]);
                 head = processOrder[j];
                 numMore++; //Update counters
                 more--;
                 j++;
+            }
+            //Update track count if head
+            if(head < 199 && head == arrayMore[numMore]){
+                totalNumTracksTraversed += abs(head - 199);
             }
             //Update direction
             isGoingLeft = true;
